@@ -10,7 +10,7 @@ class ProductItem extends StatelessWidget {
   // final String imageUrl;
   // ProductItem(this.id, this.title, this.imageUrl);
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -24,13 +24,15 @@ class ProductItem extends StatelessWidget {
             child: Image.network(product.imageUrl, fit: BoxFit.cover)),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
-          leading: IconButton(
-            icon: Icon(
-                product.isFavorite ? Icons.favorite : Icons.favorite_border),
-            onPressed: () {
-              product.toggleFavoriteStatus();
-            },
-            color: Theme.of(context).accentColor,
+          leading: Consumer<Product>(
+            builder: (BuildContext ctx, product, child) => IconButton(
+              icon: Icon(
+                  product.isFavorite ? Icons.favorite : Icons.favorite_border),
+              onPressed: () {
+                product.toggleFavoriteStatus();
+              },
+              color: Theme.of(context).accentColor,
+            ),
           ),
           title: Text(
             product.title,
